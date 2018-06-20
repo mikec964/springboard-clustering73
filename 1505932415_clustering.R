@@ -34,7 +34,7 @@ wssplot <- function(data, nc=15, seed=1234) {
                    ylab="Within groups sum of squares")
             }
 
-wssplot(wine)
+wssplot(df)
 
 # Exercise 2:
 #   * How many clusters does this method suggest?
