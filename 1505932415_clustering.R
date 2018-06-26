@@ -12,6 +12,7 @@ head(wine)
 
 # Exercise 1: Remove the first column from the data and scale
 # it using the scale() function
+#mac: this scales by standard deviations from mean
 wine$Type <- NULL
 wine <- scale(wine)
 head(wine)
@@ -24,22 +25,27 @@ head(wine)
 # number of clusters in a K-means solution can be helpful. A bend in the 
 # graph can suggest the appropriate number of clusters. 
 
+#mac: wss is within-groups sums of squares
 wssplot <- function(data, nc=15, seed=1234) {
-              wss <- (nrow(data)-1)*sum(apply(data,2,var))
-              for (i in 2:nc) {
-                set.seed(seed)
-                wss[i] <- sum(kmeans(data, centers=i)$withinss)
-              }
-              plot(1:nc, wss, type="b", xlab="Number of Clusters",
-                   ylab="Within groups sum of squares")
-            }
+  wss <- (nrow(data)-1)*sum(apply(data,2,var)) # wss[1] for a single cluster
+  for (i in 2:nc) {
+    set.seed(seed)
+    wss[i] <- sum(kmeans(data, centers=i)$withinss)
+  }
+  plot(1:nc, wss, type="b", xlab="Number of Clusters",
+       ylab="Within groups sum of squares")
+}
 
-wssplot(df)
+wssplot(wine)
 
 # Exercise 2:
 #   * How many clusters does this method suggest?
 #   * Why does this method work? What's the intuition behind it?
 #   * Look at the code for wssplot() and figure out how it works
+#mac: It suggests 3 clusters, the wss reduction declines above 3
+#mac: It works by first scaling all metrics to SD from mean
+#mac: The function calculates wss for 1 to 15 kmeans clusters
+
 
 # Method 2: Use the NbClust library, which runs many experiments
 # and gives a distribution of potential number of clusters.
@@ -48,8 +54,8 @@ library(NbClust)
 set.seed(1234)
 nc <- NbClust(df, min.nc=2, max.nc=15, method="kmeans")
 barplot(table(nc$Best.n[1,]),
-	          xlab="Numer of Clusters", ylab="Number of Criteria",
-		            main="Number of Clusters Chosen by 26 Criteria")
+        xlab="Numer of Clusters", ylab="Number of Criteria",
+        main="Number of Clusters Chosen by 26 Criteria")
 
 
 # Exercise 3: How many clusters does this method suggest?
