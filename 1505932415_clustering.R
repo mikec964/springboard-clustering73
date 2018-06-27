@@ -86,4 +86,7 @@ table(wine$Type, fit.km$cluster)
 # * Would you consider this a good clustering?
 
 library(cluster)
-#clusplot(fit.km$centers)
+clusplot(wine, fit.km$cluster)
+
+#mac: the grouping looks good to me!
+#mac: there are just a few in the wrong group
