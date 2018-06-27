@@ -79,7 +79,10 @@ data(wine, package="rattle.data")
 table(wine$Type)
 fit.km$cluster <- as.factor(fit.km$cluster)
 table(fit.km$cluster)
-table(wine$Type, fit.km$cluster)
+#mac: predicted numbers are arbitrarily assigned, but are they close?
+#mac: look at a confusion matrix
+table(actual=wine$Type, predicted=fit.km$cluster)
+#mac: yes, remarkably so, only about 6 mismatches
 
 # Exercise 6:
 # * Visualize these clusters using  function clusplot() from the cluster library
@@ -87,6 +90,14 @@ table(wine$Type, fit.km$cluster)
 
 library(cluster)
 clusplot(wine, fit.km$cluster)
-
 #mac: the grouping looks good to me!
 #mac: there are just a few in the wrong group
+
+#mac: Principal Component Analysis (PCA)
+wine_d <- scale(wine[-1]) # scale, remove column 1
+wine_pc <- princomp(wine_d)
+summary(wine_pc)
+#mac: note component 1 and 2 predict 55.4% of point variability
+cor(wine_d)
+plot(wine_pc$scores[,"Comp.1"], wine_pc$scores[,"Comp.2"])
+#mac: note similarity between plot with 2 components and actual!
